@@ -1,8 +1,9 @@
 // webpack.config.js
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     devtool: 'source-map',
     entry: './src/index.js', // Your entry file
     output: {
@@ -19,6 +20,18 @@ module.exports = {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader'],
             },
+        ],
+    },
+    optimization: {
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    format: {
+                        comments: false,
+                    },
+                },
+                extractComments: false,
+            }),
         ],
     },
 };
