@@ -49,20 +49,45 @@ const chatBotUi = {
     createChatBot: function () {
         let chatBot = document.createElement("div");
         chatBot.className = "chatbot";
+        
         let chatHeader = document.createElement("header");
-        chatHeader.innerHTML = '<h2>ChatBot</h2><span class="close-btn material-symbols-outlined">close</span>';
+        let h2 = document.createElement("h2");
+        h2.textContent = "ChatBot";
+        let closeBtn = document.createElement("span");
+        closeBtn.className = "close-btn material-symbols-outlined";
+        closeBtn.textContent = "close";
+        chatHeader.appendChild(h2);
+        chatHeader.appendChild(closeBtn);
+        
         let chatBox = document.createElement("ul");
         chatBox.className = "chatbox";
         let chatItem = document.createElement("li");
         chatItem.className = "chat incoming";
-        chatItem.innerHTML = '<span class="material-symbols-outlined">smart_toy</span><p>Hai there, How was the day?</p>';
+        let smartToySpan = document.createElement("span");
+        smartToySpan.className = "material-symbols-outlined";
+        smartToySpan.textContent = "smart_toy";
+        let p = document.createElement("p");
+        p.textContent = "Hai there, How was the day?";
+        chatItem.appendChild(smartToySpan);
+        chatItem.appendChild(p);
         chatBox.appendChild(chatItem);
+        
         let chatInput = document.createElement("div");
         chatInput.className = "chat-input";
-        chatInput.innerHTML = '<textarea placeholder="Enter a message.." required></textarea><span id="send-btn" class="material-symbols-outlined">send</span>';
+        let textarea = document.createElement("textarea");
+        textarea.placeholder = "Enter a message..";
+        textarea.required = true;
+        let sendBtn = document.createElement("span");
+        sendBtn.id = "send-btn";
+        sendBtn.className = "material-symbols-outlined";
+        sendBtn.textContent = "send";
+        chatInput.appendChild(textarea);
+        chatInput.appendChild(sendBtn);
+        
         chatBot.appendChild(chatHeader);
         chatBot.appendChild(chatBox);
         chatBot.appendChild(chatInput);
+        
         return chatBot;
     },
     bindListenersToElements: function () {
@@ -82,7 +107,7 @@ const chatBotUi = {
                 this.handleChat();
             }
         });
-        this.sendChatBtn.addEventListener("click", this.handleChat);
+        this.sendChatBtn.addEventListener("click", () => this.handleChat());
         this.chatbotCloseBtn.addEventListener("click", () => document.body.classList.remove("show-chatbot"));
     },
     createChatLi: function (message, className) {
@@ -93,9 +118,9 @@ const chatBotUi = {
         chatLi.querySelector("p").textContent = message;
         return chatLi;
     },
-    generateResponse: function (incomingChatLi) {
-        const API_URL = "https://api.openai.com/v1/chat/completions";
+    generateResponse: async function (incomingChatLi) {
         const messageElement = incomingChatLi.querySelector("p");
+        const API_URL = "https://api.openai.com/v1/chat/completions";
         const requestOptions = {
             method: "POST",
             headers: {
@@ -107,13 +132,21 @@ const chatBotUi = {
                 message: [{ role: "user", content: this.userMessage }]
             })
         };
-
-        fetch(API_URL, requestOptions).then(res => res.json()).then(data => {
+        await this.apiCall(API_URL, requestOptions).then(data => {
             messageElement.textContent = data.choices[0].message.content;
         }).catch((error) => {
             messageElement.classList.add("error");
             messageElement.textContent = "Oops! Something went wrong. Please try again.";
         }).finally(() => this.chatbox.scrollTo(0, this.chatbox.scrollHeight));
+    },
+    apiCall: async function (url, requestOptions) {
+        try {
+            let resp = await fetch(url, requestOptions);
+            return await resp.json();
+        } catch (error) {
+            console.log("Error >>> ", error);
+            throw error;
+        }
     },
     handleChat: function () {
         this.userMessage = this.chatInput.value.trim();

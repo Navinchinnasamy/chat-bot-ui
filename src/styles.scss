@@ -1,3 +1,6 @@
+$bg-color: #3498db;
+$chat-bg-color: #724ae8;
+
 /* Import Google Fonts - Poppins */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 * {
@@ -8,7 +11,7 @@
 }
 
 body {
-	background: #E3F2FD;
+	background: $bg-color;
 }
 .chatbot-toggler {
 	position: fixed;
@@ -23,7 +26,7 @@ body {
 	justify-content: center;
 	outline: none;
 	cursor: pointer;
-	background: #724ae8;
+	background: $chat-bg-color;
 	border-radius: 50%;
 	transition: all 0.2s ease;
 }
@@ -61,7 +64,7 @@ body {
 	pointer-events: auto;
 }
 .chatbot header {
-	background: #724ae8;
+	background: $chat-bg-color;
 	padding: 16px 0;
 	text-align: center;
 	position: relative;
@@ -92,7 +95,7 @@ body {
 	width: 32px;
 	color: #fff;
 	align-self: flex-end;
-	background: #724ae8;
+	background: $chat-bg-color;
 	text-align: center;
 	line-height: 32px;
 	border-radius: 10px;
@@ -109,7 +112,7 @@ body {
 	font-size: 0.95rem;
 	padding: 12px 16px;
 	border-radius: 10px 10px 0 10px;
-	background: #724ae8;
+	background: $chat-bg-color;
 }
 .chatbox .chat p.error {
 	color: #721c24;
@@ -144,7 +147,7 @@ body {
 	align-self: flex-end;
 	height: 55px;
 	line-height: 55px;
-	color: #724ae8;
+	color: $chat-bg-color;
 	font-size: 1.35rem;
 	cursor: pointer;
 	visibility: hidden;
